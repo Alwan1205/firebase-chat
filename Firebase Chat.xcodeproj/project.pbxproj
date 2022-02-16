@@ -31,11 +31,11 @@
 		8474E09A2797AAD80021BB96 /* TimestampManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474E0992797AAD80021BB96 /* TimestampManager.swift */; };
 		8474E0A127A286CF0021BB96 /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8474E0A027A286CF0021BB96 /* Chat.swift */; };
 		847CE04627716C60006F4A1D /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847CE04527716C60006F4A1D /* StorageManager.swift */; };
-		84AB657127ACCFF000518261 /* FCMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AB657027ACCFEF00518261 /* FCMManager.swift */; };
 		84AB657427B395A000518261 /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 84AB657227B3959F00518261 /* CoreData.xcdatamodeld */; };
 		84AF308427B6432C00F092DB /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF308327B6432B00F092DB /* CoreDataManager.swift */; };
+		84BDCA9027BCA26800120E3F /* FCMManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84BDCA8F27BCA26800120E3F /* FCMManager.swift */; };
+		84BDCA9127BCA3CA00120E3F /* Pods_Firebase_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ADDAD72987745EFF8199BEA /* Pods_Firebase_Chat.framework */; };
 		84D46CF227BB7DD8003DFFC7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D46CF127BB7DD8003DFFC7 /* User.swift */; };
-		F0DAD6C42A7181F4C369ABF1 /* Pods_Firebase_Chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ADDAD72987745EFF8199BEA /* Pods_Firebase_Chat.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,9 +69,9 @@
 		8474E0A027A286CF0021BB96 /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		847CE04527716C60006F4A1D /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		84AB656F27ACB9BF00518261 /* Firebase Chat.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Firebase Chat.entitlements"; sourceTree = "<group>"; };
-		84AB657027ACCFEF00518261 /* FCMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FCMManager.swift; path = ../../../../Downloads/FCMManager.swift; sourceTree = "<group>"; };
 		84AB657327B3959F00518261 /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 		84AF308327B6432B00F092DB /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		84BDCA8F27BCA26800120E3F /* FCMManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMManager.swift; sourceTree = "<group>"; };
 		84D46CF127BB7DD8003DFFC7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,7 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0DAD6C42A7181F4C369ABF1 /* Pods_Firebase_Chat.framework in Frameworks */,
+				84BDCA9127BCA3CA00120E3F /* Pods_Firebase_Chat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,7 +151,7 @@
 				846EAB322769D4C5003EE00F /* AppDelegate.swift */,
 				846EAB342769D4C5003EE00F /* SceneDelegate.swift */,
 				846EAB592769F21D003EE00F /* Extensions.swift */,
-				84AB657027ACCFEF00518261 /* FCMManager.swift */,
+				84BDCA8F27BCA26800120E3F /* FCMManager.swift */,
 				84AF308327B6432B00F092DB /* CoreDataManager.swift */,
 				845928C2278E6D53004AEEBF /* FirestoreManager.swift */,
 				847CE04527716C60006F4A1D /* StorageManager.swift */,
@@ -355,10 +355,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84AB657127ACCFF000518261 /* FCMManager.swift in Sources */,
 				846EAB4D2769DF01003EE00F /* LoginViewController.swift in Sources */,
 				8474E0A127A286CF0021BB96 /* Chat.swift in Sources */,
 				846EAB5E276B476D003EE00F /* DatabaseManager.swift in Sources */,
+				84BDCA9027BCA26800120E3F /* FCMManager.swift in Sources */,
 				846EAB4F2769DF1E003EE00F /* RegisterViewController.swift in Sources */,
 				846EAB552769DFB7003EE00F /* NewConversationViewController.swift in Sources */,
 				846EAB372769D4C5003EE00F /* ConversationsViewController.swift in Sources */,
@@ -527,14 +527,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Firebase Chat/Firebase Chat.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7W2N6MYJJA;
+				DEVELOPMENT_TEAM = 933M28RU85;
 				INFOPLIST_FILE = "Firebase Chat/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "indocyber.Firebase-Chat";
+				PRODUCT_BUNDLE_IDENTIFIER = "alwan.Firebase-Chat";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -549,14 +549,14 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Firebase Chat/Firebase Chat.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7W2N6MYJJA;
+				DEVELOPMENT_TEAM = 933M28RU85;
 				INFOPLIST_FILE = "Firebase Chat/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "indocyber.Firebase-Chat";
+				PRODUCT_BUNDLE_IDENTIFIER = "alwan.Firebase-Chat";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

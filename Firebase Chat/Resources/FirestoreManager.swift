@@ -785,29 +785,30 @@ extension FirestoreManager {
                             }
                             
                             for participant in participants {
-                                guard participant != userUID else {
-                                    print("Looping participants, the current participant is the sender")
-                                    return
-                                }
                                 
-                                self.database.collection("users").document(participant).getDocument(completion: { documentSnapshot, error in
-                                    if let error = error {
-                                        print("Failed to get fcmToken when sending push notification: \(error)")
-                                    }
-                                    else {
-                                        guard let documentData = documentSnapshot?.data() else {
-                                            print("documentData not found")
-                                            return
+                                if participant != userUID {
+                                    
+                                    self.database.collection("users").document(participant).getDocument(completion: { documentSnapshot, error in
+                                        if let error = error {
+                                            print("Failed to get fcmToken when sending push notification: \(error)")
                                         }
-                                        
-                                        guard let to = documentData["fcm_token"] as? String else {
-                                            print("to not found")
-                                            return
+                                        else {
+                                            guard let documentData = documentSnapshot?.data() else {
+                                                print("documentData not found")
+                                                return
+                                            }
+                                            
+                                            guard let to = documentData["fcm_token"] as? String else {
+                                                print("to not found")
+                                                return
+                                            }
+                                            
+                                            print("to = \(to)")
+                                            FCMManager.shared.sendPushNotification(to: to, title: title, body: body)
                                         }
-                                        
-                                        FCMManager.shared.sendPushNotification(to: to, title: title, body: body)
-                                    }
-                                })
+                                    })
+                                    
+                                }
                             }
                         }
                     }

@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
     private let emailField: UITextField = {
        let emailField = UITextField()
         // alwan current task start
-        emailField.tintColor = .black
+        emailField.textColor = .black
         // alwan current task end
         emailField.autocapitalizationType = .none
         emailField.autocorrectionType = .no
@@ -48,7 +48,7 @@ class LoginViewController: UIViewController {
     private let passwordField: UITextField = {
        let passwordField = UITextField()
         // alwan current task start
-        passwordField.tintColor = .black
+        passwordField.textColor = .black
         // alwan current task end
         passwordField.autocapitalizationType = .none
         passwordField.autocorrectionType = .no

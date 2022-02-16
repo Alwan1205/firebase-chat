@@ -32,7 +32,7 @@ class RegisterViewController: UIViewController {
     private let firstNameField: UITextField = {
        let firstName = UITextField()
         // alwan current task start
-        firstName.tintColor = .black
+        firstName.textColor = .black
         // alwan current task end
         firstName.autocapitalizationType = UITextAutocapitalizationType.words
         firstName.autocorrectionType = .no
@@ -50,7 +50,7 @@ class RegisterViewController: UIViewController {
     private let lastNameField: UITextField = {
        let lastName = UITextField()
         // alwan current task start
-        lastName.tintColor = .black
+        lastName.textColor = .black
         // alwan current task end
         lastName.autocapitalizationType = UITextAutocapitalizationType.words
         lastName.autocorrectionType = .no
@@ -68,7 +68,7 @@ class RegisterViewController: UIViewController {
     private let emailField: UITextField = {
        let emailField = UITextField()
         // alwan current task start
-        emailField.tintColor = .black
+        emailField.textColor = .black
         // alwan current task end
         emailField.autocapitalizationType = .none
         emailField.autocorrectionType = .no
@@ -87,7 +87,7 @@ class RegisterViewController: UIViewController {
     private let passwordField: UITextField = {
        let passwordField = UITextField()
         // alwan current task start
-        passwordField.tintColor = .black
+        passwordField.textColor = .black
         // alwan current task end
         passwordField.autocapitalizationType = .none
         passwordField.autocorrectionType = .no

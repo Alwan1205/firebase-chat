@@ -100,6 +100,7 @@ extension AppDelegate {
     
     // push notification active in foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        print("userNotificationCenter - UNUserNotificationCenter called")
         let content = notification.request.content
         completionHandler([.alert, .sound])
     }
