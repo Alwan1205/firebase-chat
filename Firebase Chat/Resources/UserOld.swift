@@ -6,6 +6,6 @@
 //
 
 // alwan current task
-struct User {
+struct UserOld {
     static var userUID: String? = ""
 }

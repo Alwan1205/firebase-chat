@@ -28,8 +28,10 @@ final class TimestampManager {
         
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
-        formatter.dateFormat = "EEEE, d MMMM yyyy - HH:mm"
-        formatter.locale = Locale(identifier: "id")
+        formatter.dateFormat = "EEEE, d MMMM yyyy_HH:mm"
+        
+        // change language
+//        formatter.locale = Locale(identifier: "id")
         
         let dateString = formatter.string(from: date)
         

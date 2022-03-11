@@ -81,7 +81,7 @@ class FirestoreChatMessagesTableViewCell: UITableViewCell {
 //            dateStringLabelLeadingConstraint.constant = 0
 //            dateStringLabelTrailingConstraint.constant = 0
 
-            chatMessageView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+            chatMessageView.backgroundColor = #colorLiteral(red: 0.9215686275, green: 0.9215686275, blue: 0.9215686275, alpha: 1)
             chatMessageViewTrailingConstraint.isActive = false
             chatMessageViewLeadingConstraint.isActive = true
         }

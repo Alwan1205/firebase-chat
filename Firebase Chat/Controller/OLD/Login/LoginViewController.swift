@@ -156,7 +156,7 @@ class LoginViewController: UIViewController {
             // fix login-nya
             guard let uid = Auth.auth().currentUser?.uid else { return }
             UserDefaults.standard.set(uid, forKey: "uid")
-            User.userUID = ""
+            UserOld.userUID = ""
         })
     }
     

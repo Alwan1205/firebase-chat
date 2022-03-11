@@ -246,7 +246,7 @@ class RegisterViewController: UIViewController {
                 
                 let chatUser = ChatAppUser(uid: uid, firstName: firstName, lastName: lastName, email: email, profilePicture: profilePictureString)
                 
-                FirestoreManager.shared.addUser(uid: uid, email: email, name: firstName, completion: { success in
+                FirestoreManager.shared.addUserOld(uid: uid, email: email, name: firstName, completion: { success in
                     
                     DispatchQueue.main.async {
                         strongSelf.spinner.dismiss()

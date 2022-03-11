@@ -98,8 +98,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             do {
                 try FirebaseAuth.Auth.auth().signOut()
                 
-                // alwan current task
-                User.userUID = ""
+                UserOld.userUID = ""
                 UserDefaults.standard.removeObject(forKey: "uid")
                 
                 let loginVC = LoginViewController()

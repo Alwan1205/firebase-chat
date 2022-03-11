@@ -16,9 +16,365 @@ final class CoreDataManager {
 
 extension CoreDataManager {
     
+    // NEW
+    public func updateChatRoomToCoreData(chatRoom: ChatRoom) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: appDelegate not found")
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "ChatRoomCoreData")
+        
+        request.predicate = NSPredicate(format: "roomID == %@", chatRoom.roomID)
+        
+        do {
+            let results = try managedContext.fetch(request)
+            
+            if let chatRoomCoreData = results.first {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - Updating chat room to ChatRoomCoreData for chat room: \(chatRoom)")
+                
+                chatRoomCoreData.setValue(chatRoom.chatName, forKey: "chatName")
+                chatRoomCoreData.setValue(chatRoom.chatPicture, forKey: "chatPicture")
+                chatRoomCoreData.setValue(chatRoom.isGroup, forKey: "isGroup")
+                chatRoomCoreData.setValue(chatRoom.participants, forKey: "participants")
+                chatRoomCoreData.setValue(chatRoom.participantNames, forKey: "participantNames")
+                chatRoomCoreData.setValue(chatRoom.participantFCMTokens, forKey: "participantFCMTokens")
+                chatRoomCoreData.setValue(chatRoom.participantLastUpdates, forKey: "participantLastUpdates")
+                
+                do {
+                    try managedContext.save()
+                    
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Updated chat room to ChatRoomCoreData saved")
+                }
+                catch let error as NSError {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+                }
+            }
+            else {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - Adding chat room to ChatRoomCoreData for chat room: \(chatRoom)")
+                
+                let chatRoomCoreData = NSEntityDescription.insertNewObject(forEntityName: "ChatRoomCoreData", into: managedContext)
+                
+                chatRoomCoreData.setValue(chatRoom.roomID, forKey: "roomID")
+                chatRoomCoreData.setValue(chatRoom.chatName, forKey: "chatName")
+                chatRoomCoreData.setValue(chatRoom.chatPicture, forKey: "chatPicture")
+                chatRoomCoreData.setValue(chatRoom.isGroup, forKey: "isGroup")
+                chatRoomCoreData.setValue(chatRoom.participants, forKey: "participants")
+                chatRoomCoreData.setValue(chatRoom.participantNames, forKey: "participantNames")
+                chatRoomCoreData.setValue(chatRoom.participantFCMTokens, forKey: "participantFCMTokens")
+                chatRoomCoreData.setValue(chatRoom.participantLastUpdates, forKey: "participantLastUpdates")
+                
+                do {
+                    try managedContext.save()
+                    
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Added chat room to ChatRoomCoreData saved")
+                }
+                catch let error as NSError {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+                }
+            }
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+        }
+        
+    }
+    
+    public func getAllChatRoomCoreData() -> [ChatRoom]? {
+        
+        print("File: \(#file) - Function: \(#function) - Line: \(#line) - Getting all ChatRoomCoreData")
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "ChatRoomCoreData")
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try managedContext.fetch(request)
+            
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - ChatRoomCoreData results: \(results)")
+            
+            guard !results.isEmpty else {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - results is empty")
+                return nil
+            }
+            
+            var chatRooms: [ChatRoom] = []
+            
+            for result in results {
+                guard let object = result as? NSManagedObject else { continue }
+                
+                guard let roomID = object.value(forKey: "roomID") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: roomID not found")
+                    continue
+                }
+                
+                guard let participants = object.value(forKey: "participants") as? [String] else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: participants not found")
+                    continue
+                }
+                
+                guard let isGroup = object.value(forKey: "isGroup") as? Bool else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: isGroup not found")
+                    continue
+                }
+                
+                guard let chatName = object.value(forKey: "chatName") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: chatName not found")
+                    continue
+                }
+                
+                var chatPicture: String? = nil
+                if let chatPictureTemp = object.value(forKey: "chatPicture") as? String {
+                    chatPicture = chatPictureTemp
+                }
+                
+                var participantNames: [String: String] = [:]
+                if let participantNamesTemp = object.value(forKey: "participantNames") as? [String: String] {
+                    participantNames = participantNamesTemp
+                }
+                
+                var participantFCMTokens: [String: String] = [:]
+                if let participantFCMTokensTemp = object.value(forKey: "participantFCMTokens") as? [String: String] {
+                    participantFCMTokens = participantFCMTokensTemp
+                }
+                
+                var participantLastUpdates: [String: String] = [:]
+                if let participantLastUpdatesTemp = object.value(forKey: "participantLastUpdates") as? [String: String] {
+                    participantLastUpdates = participantLastUpdatesTemp
+                }
+                
+                var messages: [ChatMessage]? = nil
+                
+                let chatRoom = ChatRoom(roomID: roomID, participants: participants, participantNames: participantNames, participantFCMTokens: participantFCMTokens, participantLastUpdates: participantLastUpdates, isGroup: isGroup, chatName: chatName, chatPicture: chatPicture, messages: messages)
+                
+                chatRooms.append(chatRoom)
+            }
+            
+            return chatRooms
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+            return nil
+        }
+        
+    }
+    
+    public func updateChatMessageToCoreData(chatMessage: ChatMessage) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: appDelegate not found")
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "ChatMessageCoreData")
+        
+        request.predicate = NSPredicate(format: "messageID == %@", chatMessage.messageID)
+        
+        do {
+            let results = try managedContext.fetch(request)
+            
+            if let coreDataChatMessage = results.first {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - Updating chat message to ChatMessageCoreData for chat message: \(chatMessage)")
+                
+                coreDataChatMessage.setValue(chatMessage.content, forKey: "content")
+                coreDataChatMessage.setValue(chatMessage.readBy, forKey: "readBy")
+                coreDataChatMessage.setValue(chatMessage.roomID, forKey: "roomID")
+                coreDataChatMessage.setValue(chatMessage.sender, forKey: "sender")
+                coreDataChatMessage.setValue(chatMessage.status, forKey: "status")
+                coreDataChatMessage.setValue(chatMessage.timestamp, forKey: "timestamp")
+                coreDataChatMessage.setValue(chatMessage.type, forKey: "type")
+                
+                do {
+                    try managedContext.save()
+                    
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Updated chat message to ChatMessageCoreData saved")
+                }
+                catch let error as NSError {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+                }
+            }
+            else {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - Adding chat message to ChatMessageCoreData for chat message: \(chatMessage)")
+                
+                let coreDataChatMessage = NSEntityDescription.insertNewObject(forEntityName: "ChatMessageCoreData", into: managedContext)
+                
+                coreDataChatMessage.setValue(chatMessage.messageID, forKey: "messageID")
+                coreDataChatMessage.setValue(chatMessage.content, forKey: "content")
+                coreDataChatMessage.setValue(chatMessage.readBy, forKey: "readBy")
+                coreDataChatMessage.setValue(chatMessage.roomID, forKey: "roomID")
+                coreDataChatMessage.setValue(chatMessage.sender, forKey: "sender")
+                coreDataChatMessage.setValue(chatMessage.status, forKey: "status")
+                coreDataChatMessage.setValue(chatMessage.timestamp, forKey: "timestamp")
+                coreDataChatMessage.setValue(chatMessage.type, forKey: "type")
+                
+                do {
+                    try managedContext.save()
+                    
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Added chat room to ChatRoomCoreData saved")
+                }
+                catch let error as NSError {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+                }
+            }
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+        }
+        
+    }
+    
+    public func getAllChatMessageCoreData() -> [ChatMessage]? {
+        
+        print("File: \(#file) - Function: \(#function) - Line: \(#line) - Getting all ChatMessageCoreData")
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return nil}
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let request = NSFetchRequest<NSManagedObject>(entityName: "ChatMessageCoreData")
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            let results = try managedContext.fetch(request)
+            
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - ChatMessageCoreData results: \(results)")
+            
+            guard !results.isEmpty else {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - results is empty")
+                return nil
+            }
+            
+            var chatMessages: [ChatMessage] = []
+            
+            for result in results {
+                guard let object = result as? NSManagedObject else { continue }
+                
+                guard let messageID = object.value(forKey: "messageID") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: messageID not found")
+                    continue
+                }
+                
+                guard let roomID = object.value(forKey: "roomID") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: roomID not found")
+                    continue
+                }
+                
+                guard let content = object.value(forKey: "content") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: content not found")
+                    continue
+                }
+                
+                guard let timestamp = object.value(forKey: "timestamp") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: timestamp not found")
+                    continue
+                }
+                
+                guard let type = object.value(forKey: "type") as? String else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: type not found")
+                    continue
+                }
+                
+                var readBy: [String]? = nil
+                if let readByTemp = object.value(forKey: "readBy") as? [String] {
+                    readBy = readByTemp
+                }
+                
+                var sender: String? = nil
+                if let senderTemp = object.value(forKey: "sender") as? String {
+                    sender = senderTemp
+                }
+                
+                var status: String? = nil
+                if let statusTemp = object.value(forKey: "status") as? String {
+                    status = statusTemp
+                }
+                
+                let chatMessage = ChatMessage(messageID: messageID, roomID: roomID, content: content, type: type, timestamp: timestamp, sender: sender, readBy: readBy, status: status)
+                
+                chatMessages.append(chatMessage)
+            }
+            
+            return chatMessages
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+            return nil
+        }
+        
+    }
+    
+    public func isValidChatMessageID(messageID: String) -> Bool {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: appDelegate not found")
+            return false
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let chatMessageRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ChatMessageCoreData")
+        
+        chatMessageRequest.predicate = NSPredicate(format: "messageID == %@", messageID)
+        
+        do {
+            let results = try managedContext.fetch(chatMessageRequest) as? [NSManagedObject]
+            
+            if results?.count == 0 {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+            return false
+        }
+    }
+    
+    public func isValidChatRoomID(roomID: String) -> Bool {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: appDelegate not found")
+            return false
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let chatRoomRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ChatRoomCoreData")
+        
+        chatRoomRequest.predicate = NSPredicate(format: "roomID == %@", roomID)
+        
+        do {
+            let results = try managedContext.fetch(chatRoomRequest) as? [NSManagedObject]
+            
+            if results?.count == 0 {
+                return true
+            }
+            else {
+                return false
+            }
+        }
+        catch let error as NSError {
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
+            return false
+        }
+    }
+    
+    // OLD
+    
     // alwan current task
     // alwan test start
-    public func saveChatRoomToCoreData(chatRoom: ChatRoom) {
+    public func saveChatRoomToCoreData(chatRoom: ChatRoomOLD) {
         var chatRooms: [NSManagedObject] = []
 
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -45,7 +401,7 @@ extension CoreDataManager {
         }
     }
 
-    public func saveChatMessageToCoreData(chatMessage: ChatMessage) {
+    public func saveChatMessageToCoreData(chatMessage: ChatMessageOLD) {
         // alwan current task
         print("saveChatMessageToCoreData - chatMessage: \(chatMessage)")
         
@@ -116,7 +472,7 @@ extension CoreDataManager {
                 
                 var chatPicture: String? = nil
                 
-                var messages: [ChatMessage]? = nil
+                var messages: [ChatMessageOLD]? = nil
                 
                 guard let participantsNames = object.value(forKey: "participantsNames") as? [String: String] else {
                     print("participantsNames not found")
@@ -138,7 +494,7 @@ extension CoreDataManager {
                     return
                 }
                 
-                let chatRoom = ChatRoom(roomID: roomID, participants: participants, isGroup: isGroup, chatName: chatName, chatPicture: chatPicture, messages: messages, participantsNames: participantsNames, lastMessage: lastMessage, timestamp: timestamp, readBy: readBy)
+                let chatRoom = ChatRoomOLD(roomID: roomID, participants: participants, isGroup: isGroup, chatName: chatName, chatPicture: chatPicture, messages: messages, participantNames: participantsNames, lastMessage: lastMessage, timestamp: timestamp, readBy: readBy)
                 
                 Chat.rooms.append(chatRoom)
                 print("Chat.rooms = \(Chat.rooms)")
@@ -217,7 +573,7 @@ extension CoreDataManager {
                     return
                 }
                 
-                let chatMessage = ChatMessage(messageID: messageID, roomID: roomID, senderID: senderID, timestamp: timestamp, type: type, readBy: readBy, content: content, status: status)
+                let chatMessage = ChatMessageOLD(messageID: messageID, roomID: roomID, senderID: senderID, timestamp: timestamp, type: type, readBy: readBy, content: content, status: status)
                 
                 for index in Chat.rooms.indices {
                     if Chat.rooms[index].roomID == roomID {
@@ -236,7 +592,7 @@ extension CoreDataManager {
         
     }
     
-    public func updateCoreDataChatRoom(chatRoom: ChatRoom) {
+    public func updateCoreDataChatRoom(chatRoom: ChatRoomOLD) {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
@@ -256,7 +612,7 @@ extension CoreDataManager {
                 coreDataChatRoom.setValue(chatRoom.isGroup, forKey: "isGroup")
                 coreDataChatRoom.setValue(chatRoom.lastMessage, forKey: "lastMessage")
                 coreDataChatRoom.setValue(chatRoom.participants, forKey: "participants")
-                coreDataChatRoom.setValue(chatRoom.participantsNames, forKey: "participantsNames")
+                coreDataChatRoom.setValue(chatRoom.participantNames, forKey: "participantsNames")
                 coreDataChatRoom.setValue(chatRoom.readBy, forKey: "readBy")
                 coreDataChatRoom.setValue(chatRoom.timestamp, forKey: "timestamp")
                 
@@ -277,7 +633,7 @@ extension CoreDataManager {
                 coreDataChatRoom.setValue(chatRoom.isGroup, forKey: "isGroup")
                 coreDataChatRoom.setValue(chatRoom.lastMessage, forKey: "lastMessage")
                 coreDataChatRoom.setValue(chatRoom.participants, forKey: "participants")
-                coreDataChatRoom.setValue(chatRoom.participantsNames, forKey: "participantsNames")
+                coreDataChatRoom.setValue(chatRoom.participantNames, forKey: "participantsNames")
                 coreDataChatRoom.setValue(chatRoom.readBy, forKey: "readBy")
                 coreDataChatRoom.setValue(chatRoom.timestamp, forKey: "timestamp")
                 coreDataChatRoom.setValue(chatRoom.roomID, forKey: "roomID")
@@ -295,7 +651,7 @@ extension CoreDataManager {
         }
     }
     
-    public func updateCoreDataChatMessage(chatMessage: ChatMessage) {
+    public func updateCoreDataChatMessage(chatMessage: ChatMessageOLD) {
         
         print("updateCoreDataChatMessage - chatMessage: \(chatMessage)")
         

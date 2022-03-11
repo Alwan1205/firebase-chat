@@ -30,15 +30,15 @@ class FirestoreChatViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        guard User.userUID == "" else {
+        guard UserOld.userUID == "" else {
             print("FirestoreChatViewController - viewDidLoad: User.userUID already exists")
             return
         }
         
-        User.userUID = UserDefaults.standard.value(forKey: "uid") as? String
+        UserOld.userUID = UserDefaults.standard.value(forKey: "uid") as? String
         
-        guard User.userUID != "" && User.userUID != nil else {
-            print("FirestoreChatViewController - viewDidLoad - User.useruID: \(User.userUID)")
+        guard UserOld.userUID != "" && UserOld.userUID != nil else {
+            print("FirestoreChatViewController - viewDidLoad - User.useruID: \(UserOld.userUID)")
             
             let loginVC = LoginViewController()
             let navVC = UINavigationController(rootViewController: loginVC)
@@ -48,16 +48,16 @@ class FirestoreChatViewController: UIViewController {
             return
         }
         
-        print("User.userUID = \(User.userUID)")
+        print("User.userUID = \(UserOld.userUID)")
         
-        guard let userUID = User.userUID else {
+        guard let userUID = UserOld.userUID else {
             print("userUID not found")
             return
         }
         
-        FirestoreManager.shared.addChatRoomsListener(userUID: userUID, firestoreChatViewController: self, completion: {
+        FirestoreManager.shared.addChatRoomsListenerOLD(userUID: userUID, firestoreChatViewController: self, completion: {
             
-            FirestoreManager.shared.addChatMessagesListener(userUID: userUID)
+            FirestoreManager.shared.addChatMessagesListenerOLD(userUID: userUID)
             
         })
         
@@ -121,7 +121,7 @@ extension FirestoreChatViewController: UITableViewDelegate, UITableViewDataSourc
         
         if let readBy = readBy {
             for reader in readBy {
-                if User.userUID == reader {
+                if UserOld.userUID == reader {
                     isRead = true
                 }
             }
@@ -135,7 +135,7 @@ extension FirestoreChatViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         chatRoomsTableView.deselectRow(at: indexPath, animated: false)
         
-        guard let userUID = User.userUID
+        guard let userUID = UserOld.userUID
         else {
             print("userUID not found")
             return

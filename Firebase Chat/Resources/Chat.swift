@@ -9,7 +9,11 @@ import FirebaseFirestore
 
 // disimpan ke local data
 struct Chat {
-    static var rooms = [ChatRoom]()
+    // NEW
+    static var isInitialSetupDone: Bool = false
+    
+    // OLD
+    static var rooms = [ChatRoomOLD]()
     static var lastUpdated = String()
     static var chatRoomsListener: ListenerRegistration?
     static var chatMessagesListener: ListenerRegistration?

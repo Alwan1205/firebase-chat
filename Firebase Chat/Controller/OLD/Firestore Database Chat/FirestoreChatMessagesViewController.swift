@@ -17,7 +17,7 @@ class FirestoreChatMessagesViewController: UIViewController {
     @IBOutlet weak var chatViewBottomConstraint: NSLayoutConstraint!
     
     var userUID = String()
-    var chatRoom: ChatRoom?
+    var chatRoom: ChatRoomOLD?
     
     var viewTap: UITapGestureRecognizer? = nil
     
@@ -106,11 +106,11 @@ extension FirestoreChatMessagesViewController {
     }
     
     func sendChatMessage(userUID: String, roomID: String, timestamp: String, type: String, content: String) {
-        FirestoreManager.shared.sendChatMessage(userUID: userUID, room: roomID, timestamp: timestamp, type: type, content: content)
+        FirestoreManager.shared.sendChatMessageOLD(userUID: userUID, room: roomID, timestamp: timestamp, type: type, content: content)
         
         FirestoreManager.shared.updateChatRoomLastMessage(userUID: userUID, roomID: roomID, timestamp: timestamp, lastMessage: content)
         
-        FirestoreManager.shared.sendPushNotification(userUID: userUID, roomID: roomID, body: content)
+        FirestoreManager.shared.sendPushNotificationOLD(userUID: userUID, roomID: roomID, body: content)
         
         // alwan current task
         // alwan test start
@@ -153,7 +153,7 @@ extension FirestoreChatMessagesViewController {
                 }
                 
                 if isRead == false {
-                    FirestoreManager.shared.updateChatMessageRead(userUID: self.userUID, messageID: message.messageID)
+                    FirestoreManager.shared.updateChatMessageReadOLD(userUID: self.userUID, messageID: message.messageID)
                     
                     if index == messages.count - 1 {
                         // kirim read ke chat room
@@ -281,7 +281,7 @@ extension FirestoreChatMessagesViewController: UITableViewDelegate, UITableViewD
         
         let chatName = chatRoom?.chatName ?? ""
         
-        let participantsNames = chatRoom?.participantsNames ?? [:]
+        let participantsNames = chatRoom?.participantNames ?? [:]
         
         // alwan current task
         // alwan comment start

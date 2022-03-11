@@ -13,8 +13,7 @@ import CoreData
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
 
-    // alwan current task start
-    // core data
+    // alwan comment: core data
     lazy var persistentContainer: NSPersistentContainer = {
 
         let container = NSPersistentContainer(name: "CoreData")
@@ -26,24 +25,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
         })
         return container
     }()
-    // alwan current task end
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // default realtime and firestore database
+        // alwan comment: firebase & firestore
         FirebaseApp.configure()
+        
+        // alwan comment: push notification
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
-        
-//        application.registerForRemoteNotifications()
-        
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: { success, _ in
-            guard success else {
-                return
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: { success, error in
+            if let error = error {
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: \(error)")
             }
-            
-            print("Success registering APNS registry")
+            else {
+                guard success else {
+                    print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: Failed registering APNS registry")
+                    return
+                }
+                
+                print("File: \(#file) - Function: \(#function) - Line: \(#line) - success registering APNS registry")
+            }
         })
         
         application.registerForRemoteNotifications()
@@ -71,44 +74,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
 extension AppDelegate {
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-//        messaging.token { token, _ in
-//            guard let token = token else {
-//                return
-//            }
-//
-//            print("token = \(token)")
-//        }
-        
         guard let fcmToken = fcmToken else {
-            print("fcmToken not found")
+            print("File: \(#file) - Function: \(#function) - Line: \(#line) - Error: fcmToken not found")
             return
         }
         
         UserDefaults.standard.set(fcmToken, forKey: "fcmToken")
         
-        print("fcmToken = \(fcmToken)")
+        print("File: \(#file) - Function: \(#function) - Line: \(#line) - Received fcmToken: \(fcmToken)")
     }
     
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        let deviceTokenString = deviceToken.hexString
-//            print(deviceTokenString)
-//
-//        UserDefaults.standard.set(deviceTokenString, forKey: "deviceToken")
-//
-//        print("deviceTokenString = \(deviceTokenString)")
-    }
-    
-    // push notification active in foreground
+    // alwan comment: push notification active in foreground
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("userNotificationCenter - UNUserNotificationCenter called")
-        let content = notification.request.content
+        print("File: \(#file) - Function: \(#function) - Line: \(#line) - userNotificationCenter willPresent notification called")
         completionHandler([.alert, .sound])
-    }
-}
-
-extension Data {
-    var hexString: String {
-        let hexString = map { String(format: "%02.2hhx", $0) }.joined()
-        return hexString
     }
 }
